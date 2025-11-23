@@ -5,9 +5,6 @@ import joblib
 import os
 from datetime import datetime
 
-# ==========================================
-# 1. PAGE CONFIGURATION
-# ==========================================
 st.set_page_config(
     page_title="Intelligent Predictor",
     page_icon="⚡",
@@ -15,9 +12,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ==========================================
-# 2. SESSION STATE MANAGEMENT
-# ==========================================
 if 'page' not in st.session_state:
     st.session_state.page = 'Predict'
 if 'history' not in st.session_state:
@@ -25,9 +19,6 @@ if 'history' not in st.session_state:
 if 'last_prediction' not in st.session_state:
     st.session_state.last_prediction = None
 
-# ==========================================
-# 3. ENHANCED CSS (WITH ALL REQUESTED IMPROVEMENTS)
-# ==========================================
 st.markdown("""
 <style>
     /* 1. FORCE DARK THEME BACKGROUNDS */
@@ -242,9 +233,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# 4. HELPER FUNCTIONS
-# ==========================================
 @st.cache_resource
 def load_model():
     try:
@@ -264,9 +252,7 @@ def get_defaults():
 model = load_model()
 defaults = get_defaults()
 
-# ==========================================
-# 5. SIDEBAR NAVIGATION
-# ==========================================
+#Navbar
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/3596/3596090.png", width=40)
     st.markdown("<h2 style='color:white; margin-top:-10px;'>DRILLING RATE<br>PREDICTOR</h2>", unsafe_allow_html=True)
@@ -280,12 +266,10 @@ with st.sidebar:
             st.session_state.page = option
             st.rerun()
 
-# ==========================================
-# 6. PAGE: PREDICT
-# ==========================================
+#Predict section
 if st.session_state.page == "Predict":
     
-    # --- CARD 1: MACHINE PARAMETERS (ENHANCED STYLING) ---
+    #Machine parameters card
     st.markdown('<div class="custom-card"><div class="card-header">⚙️ MACHINE PARAMETERS</div>', unsafe_allow_html=True)
     
     c1, c2, c3 = st.columns(3)
@@ -301,7 +285,7 @@ if st.session_state.page == "Predict":
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- CARD 2: ROCK PROPERTIES (ENHANCED STYLING) ---
+    #Rock properties card
     st.markdown('<div class="custom-card-rock"><div class="card-header">🪨 ROCK PROPERTIES</div>', unsafe_allow_html=True)
     
     r1, r2, r3, r4 = st.columns(4)
@@ -320,14 +304,11 @@ if st.session_state.page == "Predict":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- ACTION AREA ---
     col_btn, col_res = st.columns([1, 2])
     
     with col_btn:
         st.markdown("<br>", unsafe_allow_html=True)
-        # BIGGER ANALYZE BUTTON
         if st.button("ANALYZE & PREDICT", key="analyze_btn"):
-            # Prepare Input
             input_data = pd.DataFrame([{
                 'bit_diameter_mm': bit_dia, 'rock_drill_power_kw': drill_pwr,
                 'blow_frequency_bpm': blow_freq, 'pulldown_pressure_bar': pulldown,
@@ -348,12 +329,10 @@ if st.session_state.page == "Predict":
                 except Exception as e:
                     st.error(f"Prediction Error: {e}")
             else:
-                # FALLBACK
                 base = (drill_pwr / ucs) * 5
                 prediction_val = max(0.5, min(base, 5.0)) 
                 st.toast("⚠️ Using Demo Mode (Model not found)", icon="⚠️")
-
-            # Update State
+           
             st.session_state.last_prediction = prediction_val
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             st.session_state.history.insert(0, {
@@ -365,7 +344,7 @@ if st.session_state.page == "Predict":
 
     with col_res:
         val_to_show = st.session_state.last_prediction if st.session_state.last_prediction else 0.00
-        # 3D CALCULATOR DISPLAY
+        #Prediction display
         st.markdown(f"""
         <div class="result-3d-box">
             <div style="flex: 1;">
@@ -376,9 +355,7 @@ if st.session_state.page == "Predict":
         </div>
         """, unsafe_allow_html=True)
 
-# ==========================================
-# 7. PAGE: HISTORY
-# ==========================================
+#History section
 elif st.session_state.page == "History":
     st.markdown("## ⏱ Prediction History")
     st.markdown("---")
@@ -392,9 +369,7 @@ elif st.session_state.page == "History":
     else:
         st.info("No predictions made yet.")
 
-# ==========================================
-# 8. PAGE: HOW IT WORKS
-# ==========================================
+#How it works section
 elif st.session_state.page == "How it Works":
     st.markdown("## 💡 How it Works")
     st.markdown("---")
@@ -428,9 +403,7 @@ elif st.session_state.page == "How it Works":
         </div>
         """, unsafe_allow_html=True)
 
-# ==========================================
-# 9. PAGE: RESEARCH
-# ==========================================
+#Research section
 elif st.session_state.page == "Research":
     st.markdown("## 📄 Research Documentation")
     st.markdown("---")
@@ -482,3 +455,4 @@ elif st.session_state.page == "Research":
         st.warning("Research paper file ('research_paper.pdf') not found.")
 
         st.info("To test the download functionality, create a placeholder PDF file named 'research_paper.pdf' in the same directory as this script.")
+
