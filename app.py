@@ -467,7 +467,7 @@ elif st.session_state.page == "Research":
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    file_path = "data/researchFile.pdf"
+    file_path = "researchFile.pdf"
     if os.path.exists(file_path):
         with open(file_path, "rb") as pdf_file:
             pdf_bytes = pdf_file.read()
@@ -480,4 +480,5 @@ elif st.session_state.page == "Research":
         )
     else:
         st.warning("Research paper file ('research_paper.pdf') not found.")
+
         st.info("To test the download functionality, create a placeholder PDF file named 'research_paper.pdf' in the same directory as this script.")
