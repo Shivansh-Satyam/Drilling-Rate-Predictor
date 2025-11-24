@@ -236,8 +236,24 @@ st.markdown("""
 @st.cache_resource
 def load_model():
     try:
-        return joblib.load('drilling_prediction_model.pkl')
-    except:
+        # Try multiple possible paths
+        possible_paths = [
+            'drilling_prediction_model.pkl',
+            './drilling_prediction_model.pkl',
+            'model/drilling_prediction_model.pkl',
+            './model/drilling_prediction_model.pkl'
+        ]
+        
+        for path in possible_paths:
+            if os.path.exists(path):
+                st.success(f"Model found at: {path}")
+                return joblib.load(path)
+        
+        st.error("Model file not found in any location")
+        return None
+        
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
         return None
 
 def get_defaults():
@@ -455,4 +471,5 @@ elif st.session_state.page == "Research":
         st.warning("Research paper file ('research_paper.pdf') not found.")
 
         st.info("To test the download functionality, create a placeholder PDF file named 'research_paper.pdf' in the same directory as this script.")
+
 
