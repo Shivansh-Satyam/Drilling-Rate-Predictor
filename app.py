@@ -347,7 +347,7 @@ if st.session_state.page == "Predict":
             else:
                 base = (drill_pwr / ucs) * 5
                 prediction_val = max(0.5, min(base, 5.0)) 
-                st.toast("⚠️ Using Demo Mode (Model not found)", icon="⚠️")
+                st.toast("Using Demo Mode (Model not found)", icon="⚠️")
            
             st.session_state.last_prediction = prediction_val
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -471,5 +471,6 @@ elif st.session_state.page == "Research":
         st.warning("Research paper file ('research_paper.pdf') not found.")
 
         st.info("To test the download functionality, create a placeholder PDF file named 'research_paper.pdf' in the same directory as this script.")
+
 
 
